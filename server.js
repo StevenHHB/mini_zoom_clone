@@ -18,12 +18,15 @@ app.get('/:room', (req, res) => {
 })
 
 io.on('connection', socket => {
-    socket.on('connection', (roomId,userId)=>{
-        console.log(roomId,userId)
-    })
-})
+    socket.on('join-room', (roomId, userId) => {
+        socket.join(roomId);
+        console.log(roomId, userId);
+        socket.broadcast.to(roomId).emit('user-connected', userId); // Broadcast to all but the sender
+    });
+});
 
 
 
-server.listen('3000')
+
+server.listen(3000)
 
